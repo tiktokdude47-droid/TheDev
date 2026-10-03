@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Candle Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--BODY-START-->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-sound" viewBox="0 0 24 24"><path fill="currentColor" d="M4 9h4l5-4v14l-5-4H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></symbol>
+  <symbol id="i-mute" viewBox="0 0 24 24"><path fill="currentColor" d="M4 9h4l5-4v14l-5-4H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M17 9l5 6M22 9l-5 6"/></symbol>
+  <symbol id="i-theme" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 4a8 8 0 010 16z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="currentColor"/><path fill="currentColor" d="M4 21a8 8 0 0116 0z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4l13 8-13 8z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path fill="currentColor" d="M6 4h4v16H6zM14 4h4v16h-4z"/></symbol>
+  <symbol id="i-logo" viewBox="0 0 32 32"><rect x="4" y="11" width="6" height="12" rx="1" style="fill:var(--down)"/><path d="M7 6v5M7 23v4" style="stroke:var(--down)" stroke-width="2"/><rect x="13" y="8" width="6" height="10" rx="1" style="fill:var(--up)"/><path d="M16 3v5M16 18v5" style="stroke:var(--up)" stroke-width="2"/><rect x="22" y="4" width="6" height="11" rx="1" style="fill:var(--accent)"/><path d="M25 1v3M25 15v6" style="stroke:var(--accent)" stroke-width="2"/></symbol>
+</svg>
+
+<!-- ================= MAP ================= -->
+<section id="screen-map" class="screen">
+  <header class="topbar">
+    <div class="brand"><svg class="brand-mark"><use href="#i-logo"/></svg><span>Candle Quest</span></div>
+    <div class="spacer"></div>
+    <div class="player-chip">
+      <span class="rank-badge" id="map-rank">Intern</span>
+      <div>
+        <div class="xpbar"><i id="map-xpfill"></i></div>
+        <div class="xptext mono" id="map-xptext">0 XP</div>
+      </div>
+    </div>
+    <button class="icon-btn" id="btn-profile" title="Profile &amp; trade journal" aria-label="Profile and trade journal"><svg><use href="#i-user"/></svg></button>
+    <button class="icon-btn sound-toggle" title="Sound on/off" aria-label="Toggle sound"><svg><use href="#i-sound"/></svg></button>
+    <button class="icon-btn theme-toggle" title="Theme: system / dark / light" aria-label="Change theme"><svg><use href="#i-theme"/></svg></button>
+  </header>
+
+  <div class="map-wrap">
+    <div>
+      <div class="hero">
+        <h1>Learn to trade without <em>losing real money.</em></h1>
+        <p>Eight levels take you from reading a single candle to keeping your head in a market built to shake you out. Every round is graded on your process, not just your luck.</p>
+        <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
+      </div>
+      <div class="path" id="level-path"></div>
+    </div>
+
+    <aside class="side-col">
+      <div class="card mode-card" id="card-daily">
+        <span class="label">Daily challenge</span>
+        <h3 id="daily-title">Today's market</h3>
+        <p>One market per day, the same for every player. 100 candles. Score is the R you bank with your rules intact.</p>
+        <div class="daily-score" id="daily-score">No attempt yet today</div>
+        <div class="row"><button class="btn primary" id="btn-daily">Play today's market</button></div>
+        <div class="lock-note" id="daily-lock" hidden>Finish Level 3 to unlock.</div>
+      </div>
+      <div class="card mode-card" id="card-endless">
+        <span class="label">Sandbox</span>
+        <h3>Endless Market</h3>
+        <p>A random market each run: trends, ranges and the occasional crash. All tools unlocked. Practise until your process is boring.</p>
+        <div class="daily-score" id="endless-best">Best run: none yet</div>
+        <div class="row"><button class="btn" id="btn-endless">Start a run</button></div>
+        <div class="lock-note" id="endless-lock" hidden>Finish Level 3 to unlock.</div>
+      </div>
+      <div class="card mode-card" id="card-scen">
+        <span class="label">Scenario replays</span>
+        <h3>Survive the classics</h3>
+        <p>Fictional replays of the market events every trader should have lived through once.</p>
+        <div class="scenario-list" id="scenario-list"></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ================= LESSON ================= -->
+<section id="screen-lesson" class="screen" hidden>
+  <header class="topbar">
+    <button class="icon-btn" data-go="map" aria-label="Back to map"><svg><use href="#i-back"/></svg></button>
+    <div class="brand"><svg class="brand-mark"><use href="#i-logo"/></svg><span>Candle Quest</span></div>
+    <div class="spacer"></div>
+    <button class="icon-btn sound-toggle" aria-label="Toggle sound"><svg><use href="#i-sound"/></svg></button>
+    <button class="icon-btn theme-toggle" aria-label="Change theme"><svg><use href="#i-theme"/></svg></button>
+  </header>
+  <div class="lesson">
+    <div>
+      <div class="eyebrow" id="lesson-eyebrow">LEVEL 1 OF 8</div>
+      <h2 id="lesson-title">Reading Candles</h2>
+      <ul id="lesson-points"></ul>
+      <div class="rule-box"><span class="label">Rule to remember</span><span id="lesson-rule"></span></div>
+    </div>
+    <div>
+      <div class="card illus-card"><canvas id="lesson-canvas" aria-label="Concept illustration"></canvas></div>
+      <div class="goal-list" id="lesson-goals"></div>
+      <div class="lesson-actions">
+        <button class="btn primary big" id="btn-start-level">Start the round</button>
+        <button class="btn ghost" data-go="map">Back to map</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PLAY ================= -->
+<section id="screen-play" class="screen" hidden>
+  <header class="topbar play-bar">
+    <button class="icon-btn" id="btn-quit" aria-label="Quit to map"><svg><use href="#i-back"/></svg></button>
+    <div class="play-title" id="play-title">Level</div>
+    <div class="objectives" id="objectives"></div>
+    <div class="spacer"></div>
+    <button class="icon-btn sound-toggle" aria-label="Toggle sound"><svg><use href="#i-sound"/></svg></button>
+    <button class="icon-btn theme-toggle" aria-label="Change theme"><svg><use href="#i-theme"/></svg></button>
+  </header>
+  <div class="play-main">
+    <div class="chart-col">
+      <div class="chart-head" id="chart-head">
+        <span class="sym" id="sym">ACME</span>
+        <span class="px" id="px">100.00</span>
+        <div class="stat"><span class="label">Equity</span><span class="mono" id="h-equity">$10,000.00</span></div>
+        <div class="stat"><span class="label">Net P&amp;L</span><span class="mono" id="h-net">$0.00</span></div>
+        <div class="stat"><span class="label">Trades</span><span class="mono" id="h-trades">0</span></div>
+      </div>
+      <div class="chart-wrap" id="chart-wrap">
+        <canvas id="chart"></canvas>
+        <div class="news" id="news" hidden><span class="label">News</span><span id="news-text"></span></div>
+        <div class="overlay-play" id="overlay-play" hidden>
+          <div class="inner">
+            <button class="btn primary big" id="btn-overlay-play"><svg width="16" height="16"><use href="#i-play"/></svg> Start the market</button>
+            <p id="overlay-text">Set up your order ticket, then start the clock.</p>
+          </div>
+        </div>
+      </div>
+      <div class="chart-foot" id="chart-foot">
+        <button class="icon-btn" id="btn-playpause" aria-label="Play or pause"><svg><use href="#i-play"/></svg></button>
+        <div class="seg" id="speed-seg">
+          <button data-v="1" class="on">1×</button><button data-v="2">2×</button><button data-v="4">4×</button><button data-v="8">8×</button>
+        </div>
+        <div class="progress"><i id="progress"></i></div>
+        <span class="mono muted" id="candle-count">0/0</span>
+        <button class="btn small" id="btn-finish">Finish round</button>
+        <span class="hint-keys"><kbd>Space</kbd> play/pause · <kbd>Enter</kbd> place order · <kbd>X</kbd> close</span>
+      </div>
+    </div>
+    <aside class="side-panel" id="side-panel"></aside>
+  </div>
+</section>
+
+<!-- ================= DEBRIEF ================= -->
+<section id="screen-debrief" class="screen" hidden>
+  <header class="topbar">
+    <button class="icon-btn" data-go="map" aria-label="Back to map"><svg><use href="#i-back"/></svg></button>
+    <div class="brand"><svg class="brand-mark"><use href="#i-logo"/></svg><span>Candle Quest</span></div>
+    <div class="spacer"></div>
+    <button class="icon-btn theme-toggle" aria-label="Change theme"><svg><use href="#i-theme"/></svg></button>
+  </header>
+  <div class="debrief" id="debrief"></div>
+</section>
+
+<!-- ================= PROFILE ================= -->
+<section id="screen-profile" class="screen" hidden>
+  <header class="topbar">
+    <button class="icon-btn" data-go="map" aria-label="Back to map"><svg><use href="#i-back"/></svg></button>
+    <div class="brand"><svg class="brand-mark"><use href="#i-logo"/></svg><span>Candle Quest</span></div>
+    <div class="spacer"></div>
+    <button class="icon-btn theme-toggle" aria-label="Change theme"><svg><use href="#i-theme"/></svg></button>
+  </header>
+  <div class="profile" id="profile"></div>
+</section>
+
+<div id="modal-root"></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<canvas id="confetti"></canvas>
+<!--BODY-END-->
+<script src="game.js"></script>
+</body>
+</html>
